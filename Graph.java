@@ -51,6 +51,17 @@ public class Graph{
         }
     }
 
+    public static void dfs(ArrayList<Edge> graph[], boolean visited[], int curr){
+            System.out.println(curr+" ");
+            visited[curr] = true;
+            for(int i=0;i<graph[curr].size();i++){
+                Edge e = graph[curr].get(i);
+                if(visited[e.dest]==false)
+                    dfs(graph,visited, e.dest);
+            }
+        
+
+    }
     public static void main(String[] args) {
         
         int V=7;
@@ -66,10 +77,20 @@ public class Graph{
         //     }
         // }
         boolean visited[] = new boolean[V];
+
+        //bfs
+        // for(int i=0;i<V;i++){
+        //     if(visited[i]==false)
+        //         bfs(graph, visited,i);
+        // }
+
+        //dfs
         for(int i=0;i<V;i++){
             if(visited[i]==false)
-                bfs(graph, visited,i);
+                dfs(graph, visited,i);
         }
+
+
         
     } 
 }
