@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Graph{
 
@@ -31,6 +33,24 @@ public class Graph{
         graph[5].add(new Edge(5,6));
         graph[6].add(new Edge(6,5));
     }
+    public static void bfs(ArrayList<Edge> graph[], boolean visited[], int curr){
+        Queue<Integer> q= new LinkedList<>();
+        q.add(curr);
+        while (!q.isEmpty()) {
+            int ele= q.remove();
+            if(visited[ele]==false){
+                visited[ele] = true;
+                System.out.print(ele+" ");
+                for(int i=0;i<graph[ele].size();i++){
+                    Edge e = graph[ele].get(i);
+                    if(visited[e.dest]==false){
+                        q.add(e.dest);
+                    }
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         
         int V=7;
@@ -39,11 +59,17 @@ public class Graph{
         createGraph(graph,V);
 
         //print graph
+        // for(int i=0;i<V;i++){
+        //     for(int j=0;j<graph[i].size();j++){
+        //         Edge e = graph[i].get(j);
+        //         System.out.println("SRC "+ e.src+ " DEST "+e.dest);
+        //     }
+        // }
+        boolean visited[] = new boolean[V];
         for(int i=0;i<V;i++){
-            for(int j=0;j<graph[i].size();j++){
-                Edge e = graph[i].get(j);
-                System.out.println("SRC "+ e.src+ " DEST "+e.dest);
-            }
+            if(visited[i]==false)
+                bfs(graph, visited,i);
         }
+        
     } 
 }
