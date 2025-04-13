@@ -62,6 +62,23 @@ public class Graph{
         
 
     }
+
+    public static void modifyDfsFindPaths (ArrayList<Edge> graph[],boolean visited[], int curr, int target, String path){
+        if(curr==target){
+            System.out.println(path);
+            return;
+        }
+        visited[curr] = true;
+        for(int i=0;i<graph[curr].size();i++){
+            Edge e = graph[curr].get(i);
+            if(visited[e.dest]==false){
+                modifyDfsFindPaths(graph,visited, e.dest,target, path+e.dest);
+              
+            }
+        }
+        visited[curr] =false;
+
+    }
     public static void main(String[] args) {
         
         int V=7;
@@ -85,10 +102,17 @@ public class Graph{
         // }
 
         //dfs
-        for(int i=0;i<V;i++){
-            if(visited[i]==false)
-                dfs(graph, visited,i);
-        }
+        // for(int i=0;i<V;i++){
+        //     if(visited[i]==false)
+        //         dfs(graph, visited,i);
+        // }
+
+        //print path from src to target
+        int src=0;
+        int target=5;
+        String path="0";
+
+        modifyDfsFindPaths(graph, visited, src, target, path);
 
 
         
