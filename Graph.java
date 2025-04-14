@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 public class Graph{
 
@@ -27,9 +28,9 @@ public class Graph{
         graph[3].add(new Edge(3,5));
           graph[4].add(new Edge(4,3));
         // graph[4].add(new Edge(4,2));
-        //  graph[4].add(new Edge(4,5));
+          graph[4].add(new Edge(4,5));
         // graph[5].add(new Edge(5,3));
-          graph[5].add(new Edge(5,4));
+        // graph[5].add(new Edge(5,4));
         graph[5].add(new Edge(5,6));
         // graph[6].add(new Edge(6,5));
 
@@ -117,7 +118,17 @@ public class Graph{
         return false;
     }
     
+    public static void topologicalOrder(ArrayList<Edge> graph[], boolean visited[], int curr, Stack<Integer> recursion){
 
+        visited[curr] = true;
+        for(int i=0;i<graph[curr].size();i++){
+            Edge e = graph[curr].get(i);
+            if(visited[e.dest]==false){
+                topologicalOrder(graph, visited, e.dest, recursion);
+            }
+        }
+        recursion.push(curr);
+    }
     
     public static void main(String[] args) {
         
@@ -174,8 +185,21 @@ public class Graph{
                 break;
             }
             }
-            System.out.print(isCyclicGrpah);
+            System.out.print("isCyclicGrpah "+isCyclicGrpah+" ");
 
+        // topologiocal order print( should be DAG must)
+        if(!isCyclicGrpah){
+            Stack<Integer> recursion= new Stack<>();
+            for(int i=0;i<V;i++){
+                if(visited[i]==false){
+                    topologicalOrder(graph,  visited,i, recursion);
+                }
+            }
+
+           while(!recursion.isEmpty()){
+            System.out.print(recursion.pop()+" ");
+           }
+        }
         
     } 
 }
