@@ -25,11 +25,11 @@ public class Graph{
         graph[3].add(new Edge(3,1));
         graph[3].add(new Edge(3,4));
         graph[3].add(new Edge(3,5));
-        graph[4].add(new Edge(4,3));
+         graph[4].add(new Edge(4,3));
         graph[4].add(new Edge(4,2));
-        graph[4].add(new Edge(4,5));
+         graph[4].add(new Edge(4,5));
         graph[5].add(new Edge(5,3));
-        graph[5].add(new Edge(5,4));
+         graph[5].add(new Edge(5,4));
         graph[5].add(new Edge(5,6));
         graph[6].add(new Edge(6,5));
     }
@@ -63,7 +63,7 @@ public class Graph{
 
     }
 
-    public static void modifyDfsFindPaths (ArrayList<Edge> graph[],boolean visited[], int curr, int target, String path){
+    public static void printAllPaths (ArrayList<Edge> graph[],boolean visited[], int curr, int target, String path){
         if(curr==target){
             System.out.println(path);
             return;
@@ -72,49 +72,80 @@ public class Graph{
         for(int i=0;i<graph[curr].size();i++){
             Edge e = graph[curr].get(i);
             if(visited[e.dest]==false){
-                modifyDfsFindPaths(graph,visited, e.dest,target, path+e.dest);
+                printAllPaths(graph,visited, e.dest,target, path+e.dest);
               
             }
         }
         visited[curr] =false;
 
     }
+
+    public static boolean checkIsCyclicGraph(ArrayList<Edge> graph[], boolean visited[], int curr, int parent){
+        visited[curr] = true;
+        System.out.println("curr "+curr+" parent "+parent);
+        for(int i=0;i<graph[curr].size();i++){
+            Edge e = graph[curr].get(i);
+            if(visited[e.dest]&&e.dest!=parent){
+                return true;
+            }
+            if(visited[e.dest]==false){
+                if(checkIsCyclicGraph(graph, visited, e.dest, curr)){
+                    return true;
+                }
+            }
+        }
+        System.out.println("curr after "+curr+" parent after "+parent);
+        return false;
+    }
+
+
+    
     public static void main(String[] args) {
         
         int V=7;
         ArrayList <Edge> graph[]= new ArrayList[V];
+        boolean visited[] = new boolean[V];
+
         // create graph
         createGraph(graph,V);
 
-        //print graph
-        // for(int i=0;i<V;i++){
-        //     for(int j=0;j<graph[i].size();j++){
-        //         Edge e = graph[i].get(j);
-        //         System.out.println("SRC "+ e.src+ " DEST "+e.dest);
-        //     }
-        // }
-        boolean visited[] = new boolean[V];
+       // print graph
+            // for(int i=0;i<V;i++){
+            //     for(int j=0;j<graph[i].size();j++){
+            //         Edge e = graph[i].get(j);
+            //         System.out.println("SRC "+ e.src+ " DEST "+e.dest);
+            //     }
+            // }
 
         //bfs
-        // for(int i=0;i<V;i++){
-        //     if(visited[i]==false)
-        //         bfs(graph, visited,i);
-        // }
+            // for(int i=0;i<V;i++){
+            //     if(visited[i]==false)
+            //         bfs(graph, visited,i);
+            // }
 
         //dfs
-        // for(int i=0;i<V;i++){
-        //     if(visited[i]==false)
-        //         dfs(graph, visited,i);
-        // }
+            // for(int i=0;i<V;i++){
+            //     if(visited[i]==false)
+            //         dfs(graph, visited,i);
+            // }
 
         //print path from src to target
-        int src=0;
-        int target=5;
-        String path="0";
+            // int src=0;
+            // int target=5;
+            // String path="0";
 
-        modifyDfsFindPaths(graph, visited, src, target, path);
+            // printAllPaths(graph, visited, src, target, path);
 
-
+        // detect cycle in undirected graph
+            // int parent =-1;
+            // boolean isCyclicGrpah = false;
+            // for(int i=0;i<V;i++){
+            // if( visited[i]==false && checkIsCyclicGraph(graph, visited, i,parent )){
+            //     isCyclicGrpah = true;
+            //     break;
+            // }
+            // }
+            // System.out.print(isCyclicGrpah);
         
     } 
 }
