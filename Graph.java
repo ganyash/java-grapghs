@@ -7,7 +7,7 @@ import java.util.Stack;
 
 public class Graph{
 
-    static class Edge{
+    static class Edge  implements  Comparable<Edge>{
         int src;
         int dest;
         int weight;
@@ -15,6 +15,10 @@ public class Graph{
             this.src = src;
             this.dest= dest;
             this.weight= weight;
+        }
+        @Override
+        public int compareTo (Edge p2){
+          return this.weight-p2.weight;
         }
     }
 
@@ -36,20 +40,20 @@ public class Graph{
         }
         graph[0].add(new Edge(0,1,1));
         graph[0].add(new Edge(0,2,2));
-        // graph[1].add(new Edge(1,0));
+        graph[1].add(new Edge(1,0,1));
         graph[1].add(new Edge(1,3,0));
-        // graph[2].add(new Edge(2,0));
-        graph[2].add(new Edge(2,4,-1));
-        // graph[3].add(new Edge(3,1));
-        // graph[3].add(new Edge(3,4));
+        graph[2].add(new Edge(2,0,2));
+        graph[2].add(new Edge(2,4,1));
+        graph[3].add(new Edge(3,1,0));
+        graph[3].add(new Edge(3,4, 3));
         graph[3].add(new Edge(3,5,5));
-          graph[4].add(new Edge(4,3,-3));
-        // graph[4].add(new Edge(4,2));
-          graph[4].add(new Edge(4,5,4));
-        // graph[5].add(new Edge(5,3));
-        // graph[5].add(new Edge(5,4));
+        graph[4].add(new Edge(4,3,3));
+        graph[4].add(new Edge(4,2,1));
+        graph[4].add(new Edge(4,5,4));
+        graph[5].add(new Edge(5,3,5));
+        graph[5].add(new Edge(5,4,4));
         graph[5].add(new Edge(5,6,3));
-        // graph[6].add(new Edge(6,5));
+        graph[6].add(new Edge(6,5,3));
 
         // graph[0].add(new Edge(0, 1, 5));
         // graph[1].add(new Edge(1, 2, -2));
@@ -60,9 +64,14 @@ public class Graph{
         // graph[5].add(new Edge(5, 3, 1));
 
 
-
-
-
+        // graph[0].add(new Edge(0,1,1));
+        // graph[0].add(new Edge(0,2,2));
+        // graph[1].add(new Edge(1,3,0));
+        // graph[2].add(new Edge(2,4,-1));
+        // graph[3].add(new Edge(3,5,5));
+        // graph[4].add(new Edge(4,3,-3));
+        // graph[4].add(new Edge(4,5,4));
+        // graph[5].add(new Edge(5,6,3));
     }
     public static void bfs(ArrayList<Edge> graph[], boolean visited[], int curr){
         Queue<Integer> q= new LinkedList<>();
@@ -204,6 +213,37 @@ public class Graph{
             }
         }
     }
+
+    public static void MSTUsingPrims(ArrayList<Edge> graph[], boolean visited[],ArrayList <Edge> MSTGraph[]){
+        int MSTTotalWeight = 0;
+        int src =0;
+        PriorityQueue<Edge> pq= new PriorityQueue<>();
+       
+        for(int i=0;i<graph.length;i++){
+            MSTGraph[i]= new ArrayList<>();
+        }
+
+        pq.add(new Edge(0, 0, 0));
+        while(!pq.isEmpty()){
+            Edge node1 = pq.remove();
+            if(visited[node1.dest]==false){
+                System.out.println("node1 "+node1.src+" "+node1.dest+" "+node1.weight);
+                MSTTotalWeight+=node1.weight;
+                visited[node1.dest] = true;
+                if(node1.dest!=src){
+                    MSTGraph[node1.src].add(new Edge(node1.src, node1.dest,node1.weight));
+                    MSTGraph[node1.dest].add(new Edge(node1.dest, node1.src,node1.weight));
+                }
+
+                for(int i=0;i<graph[node1.dest].size();i++){
+                    Edge node2 = graph[node1.dest].get(i);
+                    pq.add(new Edge(node2.src, node2.dest, node2.weight));
+                }
+            }
+        }
+        System.out.println("MSTTotalWeight "+ MSTTotalWeight);
+        
+    }
     
     public static void main(String[] args) {
         
@@ -285,12 +325,23 @@ public class Graph{
             // }
 
         //bellman ford algo
-            int src =0;
-            int distance[]= new int[V];
-            getShortestPathUsingBellman(graph, src, distance);
-            for(int i=0;i<distance.length;i++){
-                 System.out.print(distance[i]+" ");
+            // int src =0;
+            // int distance[]= new int[V];
+            // getShortestPathUsingBellman(graph, src, distance);
+            // for(int i=0;i<distance.length;i++){
+            //      System.out.print(distance[i]+" ");
+            // }
+
+        // prims algo MST
+            ArrayList <Edge> MSTGraph[]= new ArrayList[V];
+            MSTUsingPrims(graph , visited, MSTGraph);
+             for(int i=0;i<V;i++){
+                for(int j=0;j<MSTGraph[i].size();j++){
+                    Edge e = MSTGraph[i].get(j);
+                    System.out.println("SRC "+ e.src+ " DEST "+e.dest+" Weight "+e.weight);
+                }
             }
+
         
     } 
 }
